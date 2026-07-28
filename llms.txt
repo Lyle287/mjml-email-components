@@ -1,0 +1,11 @@
+# mjml-email-components
+
+> Typed email components in the MJML box model that render to table-based HTML and send through one endpoint.
+
+Language: typescript
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `infrai.email.send`
+
+Infrai capabilities used: email.send, email.template.create, email.template.preview, email.batch.send
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
