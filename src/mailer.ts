@@ -5,9 +5,8 @@ import { infrai, type SendResult } from "./infrai";
 import { renderDocument } from "./render";
 import type { EmailDoc } from "./templates";
 
-export function fromAddress(): string {
-  // Has to be a domain you verified for the key; see the README.
-  return process.env.EMAIL_FROM ?? "noreply@example.com";
+export function fromAddress(): string | undefined {
+  return process.env.EMAIL_FROM;
 }
 
 export function toHtml(doc: EmailDoc): string {
@@ -16,12 +15,14 @@ export function toHtml(doc: EmailDoc): string {
 
 // Path 1 — render locally, hand over finished HTML.
 export function sendRendered(to: string, doc: EmailDoc): Promise<SendResult> {
-  return infrai.email.send({ to, from: fromAddress(), subject: doc.subject, html: toHtml(doc) });
+  const from = fromAddress();
+  return infrai.email.send({ to, ...(from ? { from } : {}), subject: doc.subject, html: toHtml(doc) });
 }
 
 // Path 2 — the markup already lives server-side; only the values travel.
 export function sendHosted(to: string, templateId: string, vars: Record<string, string>): Promise<SendResult> {
-  return infrai.email.send({ to, from: fromAddress(), template_id: templateId, template_vars: vars });
+  const from = fromAddress();
+  return infrai.email.send({ to, ...(from ? { from } : {}), template_id: templateId, template_vars: vars });
 }
 
 export interface Recipient {
@@ -31,10 +32,11 @@ export interface Recipient {
 
 // One call for a list: same hosted template, different values per row.
 export function sendHostedBatch(templateId: string, recipients: Recipient[]) {
+  const from = fromAddress();
   return infrai.email.batch.send({
     messages: recipients.map((r) => ({
       to: r.to,
-      from: fromAddress(),
+      ...(from ? { from } : {}),
       template_id: templateId,
       template_vars: r.vars,
     })),

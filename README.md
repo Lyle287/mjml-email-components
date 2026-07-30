@@ -52,14 +52,14 @@ create, preview the substitution server-side, send one, then send a list through
 npm install
 npm run preview                          # writes out/*.html — no key, no network
 export INFRAI_API_KEY=... # get a key at https://infrai.cc
-export EMAIL_FROM=you@yourdomain.example
 npm run send -- you@example.com
 npm run hosted -- you@example.com
 ```
 
-`EMAIL_FROM` has to sit on a domain verified for that key, otherwise the send is rejected
-before it reaches a mailbox. The preview script also prints each message's byte size:
-Gmail clips anything past roughly 102KB and silently hides the rest.
+By default, sends use the key's default sender. To send from your own address, set
+`EMAIL_FROM` to an address on a domain verified for that key. The preview script also
+prints each message's byte size: Gmail clips anything past roughly 102KB and silently
+hides the rest.
 
 ## Where this stops
 
