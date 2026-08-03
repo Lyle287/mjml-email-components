@@ -27,7 +27,7 @@ const template = await infrai.email.template.create({
   subject: "{{inviter}} added you to {{workspace}}",
   html: toHtml(skeleton),
 });
-console.log(`template id: ${template.id}`);
+console.log(`template id: ${template.template_id}`);
 
 const vars = {
   inviter: "Dana",
@@ -36,15 +36,15 @@ const vars = {
 };
 
 // Check the substitution server-side before any address is involved.
-const preview = await infrai.email.template.preview(template.id, { vars });
-console.log(`preview subject: ${preview.subject ?? "(unchanged)"}`);
-console.log(`preview html: ${(preview.html ?? "").length} chars`);
+const preview = await infrai.email.template.preview(template.template_id, { vars });
+console.log(`preview subject: ${preview.rendered_subject ?? "(unchanged)"}`);
+console.log(`preview html: ${(preview.rendered_html ?? "").length} chars`);
 
-const sent = await sendHosted(to, template.id, vars);
+const sent = await sendHosted(to, template.template_id, vars);
 console.log(`single send message_id: ${sent.message_id}`);
 
 // Same template, one call, different values per row.
-const batch = await sendHostedBatch(template.id, [
+const batch = await sendHostedBatch(template.template_id, [
   { to, vars },
   { to, vars: {...vars, inviter: "Kim", workspace: "Contoso" } },
 ]);

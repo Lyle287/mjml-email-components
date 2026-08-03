@@ -37,9 +37,10 @@ export const infrai = {
       send: (payload: Record<string, unknown>) => post("/v1/email/batch/send", payload),
     },
     template: {
-      create: (payload: Record<string, unknown>) => post<{ id: string }>("/v1/email/template/create", payload),
+      create: (payload: Record<string, unknown>) =>
+        post<{ template_id: string }>("/v1/email/template/create", payload),
       preview: (id: string, payload: Record<string, unknown>) =>
-        post<{ html?: string; subject?: string }>(`/v1/email/template/preview/${id}`, payload),
+        post<{ rendered_html?: string; rendered_subject?: string }>(`/v1/email/template/preview/${id}`, payload),
     },
   },
 };
